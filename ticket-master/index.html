@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ticket Master — English Speaking Game</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#eef6ff;--card:#ffffff;--soft:#f3f8ff;--cream:#fff8e6;
+  --ink:#1e293b;--muted:#64748b;--line:#dbe7f5;
+  --blue:#2563eb;--blue-d:#1d4ed8;--sky:#38bdf8;--sun:#fbbf24;--sun-d:#d97706;
+  --green:#16a34a;--red:#e04848;--mono:"Space Mono",ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:Nunito,Arial,sans-serif;color:var(--ink);min-height:100vh;background:linear-gradient(180deg,#dff0ff 0,#f5faff 380px,#fdfaf2 100%)}
+button{font-family:inherit}
+svg.i{width:1.1em;height:1.1em;vertical-align:-.18em;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.hidden{display:none!important}
+
+/* top strip */
+.strip{max-width:1080px;margin:18px auto 0;padding:0 16px;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;font-weight:900;font-size:20px;color:#1e3a8a;letter-spacing:.5px}
+.logo i{width:38px;height:38px;border-radius:11px;background:var(--blue);display:flex;align-items:center;justify-content:center;color:#fff;font-style:normal}
+.logo span{color:var(--sun-d)}
+.chip{font-family:var(--mono);font-size:11px;letter-spacing:1px;color:#1e3a8a;background:#fff;border:1px solid var(--line);padding:7px 12px;border-radius:20px}
+main{max-width:1080px;margin:14px auto;padding:0 16px 30px}
+
+.card{background:var(--card);border-radius:24px;box-shadow:0 18px 44px #2563eb18;overflow:hidden}
+.pad{padding:clamp(18px,4vw,34px)}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:2px;color:var(--muted);text-transform:uppercase}
+h1,h2{color:#1e3a8a;font-weight:900;margin:0}
+h2{font-size:clamp(22px,3vw,28px)}
+.sub{font-size:17px;line-height:1.55;color:#475569;margin:10px 0 0}
+.kz{display:flex;gap:10px;align-items:flex-start;font-size:14.5px;color:#334155;background:var(--cream);border-radius:12px;padding:9px 12px;margin:12px 0 0;line-height:1.45}
+.kz b.tagkz{font-family:var(--mono);font-size:11px;background:var(--sun);color:#78350f;padding:2px 6px;border-radius:5px;flex:none;margin-top:1px}
+
+/* home */
+.hero{position:relative;height:clamp(200px,32vw,320px)}
+.hero svg{width:100%;height:100%;display:block}
+.drive{animation:drive 9s linear infinite}
+@keyframes drive{from{transform:translateX(-420px)}to{transform:translateX(780px)}}
+.home{display:grid;grid-template-columns:1.25fr .85fr;gap:24px}
+.flaps{display:flex;flex-direction:column;gap:5px;margin:10px 0 4px}
+.flaps .row{display:flex;gap:5px}
+.flap{position:relative;width:clamp(30px,5.2vw,48px);height:clamp(40px,7vw,64px);background:#fff;border:2px solid var(--line);border-radius:8px;color:#1e3a8a;font-family:var(--mono);font-size:clamp(22px,4.2vw,40px);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 0 var(--line)}
+.flap::after{content:"";position:absolute;left:0;right:0;top:50%;height:1px;background:#dbe7f5}
+.flap.am{background:var(--sun);border-color:var(--sun-d);color:#fff;box-shadow:0 4px 0 var(--sun-d)}
+.flap.am::after{background:#ffffff66}
+.flap.go{animation:flip .5s ease both}@keyframes flip{0%{transform:rotateX(90deg)}100%{transform:none}}
+.deps{margin-top:16px;border:2px solid var(--line);border-radius:14px;overflow:hidden}
+.dep{display:grid;grid-template-columns:62px 1fr 96px 86px;gap:8px;padding:8px 14px;font-size:13px;border-top:1px solid var(--line)}
+.dep:first-child{border:0;background:var(--soft)}
+.dep span{font-family:var(--mono);letter-spacing:1px;color:#334155}
+.dep .t{color:var(--blue)}.dep .ok{color:var(--green)}
+.dep.head span{color:var(--muted);font-size:10px}
+.blink{animation:blink 1.2s steps(1) infinite}@keyframes blink{50%{opacity:.3}}
+.start{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+input[type=text]{font-family:inherit;font-size:17px;font-weight:700;padding:13px 14px;border:2px solid var(--line);background:#fff;border-radius:12px;flex:1;min-width:180px;outline:none;color:var(--ink)}
+input[type=text]:focus{border-color:var(--blue)}
+.best{margin-top:10px;font-family:var(--mono);font-size:12px;color:var(--muted)}
+
+.pass{background:var(--cream);border:2px dashed #f2cf7a;border-radius:20px;padding:20px;position:relative}
+.pass .top{display:flex;justify-content:space-between}
+.pass .route{display:flex;align-items:center;gap:10px;margin:8px 0 4px}
+.pass .city{font-family:var(--mono);font-size:28px;color:#1e3a8a}
+.pass .route i{flex:1;border-top:2px dashed #e7b94a}
+.pass .meta{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:10px 0 14px}
+.pass .meta div{font-family:var(--mono);font-size:10px;color:#a1793a;letter-spacing:1px}
+.pass .meta b{display:block;color:#1e293b;font-size:15px}
+.legs{background:#fff;border-radius:14px;padding:4px 14px}
+.legs div{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px dashed var(--line);font-weight:800;font-size:15px}
+.legs div:last-child{border:0}
+.legs span{font-family:var(--mono);color:var(--sun-d);font-size:12px}
+.legs em{margin-left:auto;font-style:normal;font-family:var(--mono);font-size:12px;color:var(--muted)}.legs em::after{content:" pts"}
+.scan{text-align:center;font-family:var(--mono);font-size:11px;letter-spacing:1px;color:#a1793a;margin-top:12px}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;gap:8px;border:0;border-radius:13px;padding:13px 20px;font-size:16px;font-weight:900;cursor:pointer;background:var(--blue);color:#fff;box-shadow:0 5px 0 var(--blue-d);transition:transform .12s,box-shadow .12s}
+.btn:hover{transform:translateY(-2px)}.btn:active{transform:translateY(3px);box-shadow:0 1px 0 var(--blue-d)}
+.btn.am{background:var(--sun);color:#422006;box-shadow:0 5px 0 var(--sun-d)}.btn.am:active{box-shadow:0 1px 0 var(--sun-d)}
+.btn.ghost{background:#e8f0fe;color:#1e3a8a;box-shadow:0 4px 0 #c9d8f6}
+.btn.mic{background:var(--red);box-shadow:0 5px 0 #a83232}
+.btn.mic.on{animation:pulse 1s infinite}@keyframes pulse{50%{box-shadow:0 0 0 8px #e0484833,0 5px 0 #a83232}}
+.btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.say{border:0;background:#e0f2fe;color:#0369a1;border-radius:50%;width:34px;height:34px;cursor:pointer;flex:none;display:inline-flex;align-items:center;justify-content:center;font-size:15px}
+.say:hover{background:var(--blue);color:#fff}
+
+/* game */
+.hud{display:grid;grid-template-columns:auto 1fr auto;gap:16px;align-items:center}
+.art{width:96px;height:72px}.art svg{width:100%;height:100%}
+.art.big{width:130px;height:96px}
+.score{display:flex;gap:6px}
+.lcd{background:var(--soft);border:2px solid var(--line);border-radius:12px;padding:6px 12px;text-align:center;min-width:84px}
+.lcd small{display:block;font-family:var(--mono);font-size:9px;letter-spacing:1.5px;color:var(--muted)}
+.lcd b{font-family:var(--mono);color:var(--blue);font-size:22px;letter-spacing:2px}
+#lcdStreak b{color:var(--sun-d)}
+.lcd.bump b{display:inline-block;animation:bump .4s}@keyframes bump{40%{transform:scale(1.3)}}
+
+.map{position:relative;margin:26px 8px 22px}
+.map .rail{position:absolute;left:0;right:0;top:9px;height:6px;border-radius:3px;background:repeating-linear-gradient(90deg,#d6e3f3 0 12px,#eaf1fa 12px 18px)}
+.map .fill{position:absolute;left:0;top:9px;height:6px;border-radius:3px;background:linear-gradient(90deg,var(--sky),var(--blue));width:0;transition:width .7s cubic-bezier(.5,0,.3,1)}
+.map .stops{position:relative;display:flex;justify-content:space-between}
+.map .st{display:flex;flex-direction:column;align-items:center;width:0}
+.map .dot{width:24px;height:24px;border-radius:50%;background:#fff;border:5px solid #d6e3f3;transition:.4s}
+.map .st.done .dot{border-color:var(--blue);background:var(--blue)}
+.map .st.now .dot{border-color:var(--blue);background:var(--sun);box-shadow:0 0 0 6px #2563eb22}
+.map .nm{font-family:var(--mono);font-size:10px;letter-spacing:1px;color:var(--muted);margin-top:6px;white-space:nowrap;text-transform:uppercase}
+.map .st.now .nm{color:#1e3a8a}
+.map .train{position:absolute;top:-24px;transition:left .7s cubic-bezier(.5,0,.3,1);transform:translateX(-50%)}
+.map .train svg{width:34px;height:22px}
+
+.q{font-size:clamp(20px,3vw,26px);font-weight:900;color:#1e3a8a;display:flex;gap:12px;align-items:center;margin:18px 0 16px;line-height:1.25}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.opt{display:flex;align-items:center;gap:12px;background:#fff;border:2px solid var(--line);border-radius:14px;padding:13px 14px;text-align:left;font-size:17px;font-weight:800;color:var(--ink);cursor:pointer;transition:.12s;box-shadow:0 3px 0 var(--line)}
+.opt .k{font-family:var(--mono);width:30px;height:30px;border-radius:8px;background:#e0f2fe;color:#0369a1;display:flex;align-items:center;justify-content:center;flex:none}
+.opt:hover:not(:disabled){border-color:var(--blue);transform:translateY(-2px)}
+.opt.ok{border-color:var(--green);background:#ecfdf3}.opt.ok .k{background:var(--green);color:#fff}
+.opt.no{border-color:var(--red);background:#fdf0f0}.opt.no .k{background:var(--red);color:#fff}
+.opt:disabled{cursor:default}
+.count{font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:16px;letter-spacing:1px}
+
+.fb{display:flex;gap:14px;align-items:center;padding:14px 16px;border-radius:14px;margin-top:18px;font-weight:700;line-height:1.45;background:#fff;border:2px solid var(--line)}
+.fb.good{background:#f0fdf4;border-color:#bbf7d0}.fb.bad{background:#fff5f5;border-color:#fecaca}.fb.info{background:#eff6ff;border-color:#bfdbfe}
+.stamp{flex:none;font-family:var(--mono);font-size:12px;letter-spacing:2px;padding:6px 10px;border:3px solid currentColor;border-radius:8px;transform:rotate(-8deg);background:#fff;animation:stamp .35s cubic-bezier(.3,1.6,.5,1) both}
+@keyframes stamp{0%{transform:rotate(-8deg) scale(2.2);opacity:0}100%{transform:rotate(-8deg) scale(1);opacity:1}}
+.fb.good .stamp{color:var(--green)}.fb.bad .stamp{color:var(--red)}.fb.info .stamp{color:var(--blue)}
+
+.chat{background:var(--soft);border-radius:16px;padding:14px;min-height:76px;margin-top:14px}
+.b{display:flex;gap:8px;align-items:flex-end;margin:8px 0;max-width:86%;animation:pop .25s}
+@keyframes pop{from{transform:translateY(6px);opacity:0}to{transform:none;opacity:1}}
+.b .t{padding:11px 14px;border-radius:16px;line-height:1.4;font-weight:700;background:#fff;box-shadow:0 2px 0 var(--line)}
+.b .who{display:block;font-family:var(--mono);font-size:10px;letter-spacing:1.5px;color:var(--muted);margin-bottom:3px}
+.b.s .t{border-bottom-left-radius:4px}
+.b.c{margin-left:auto;flex-direction:row-reverse}.b.c .t{background:#dcfce7;border-bottom-right-radius:4px;box-shadow:0 2px 0 #bbf7d0}.b.c .who{color:#15803d}
+.bank{display:flex;flex-direction:column;gap:8px;margin-top:14px}
+.line{display:flex;align-items:center;gap:12px;background:#fff;border:2px dashed #c9d8f0;border-radius:12px;padding:11px 14px;font-weight:800;cursor:pointer;text-align:left;font-size:16px;color:var(--ink);transition:.12s}
+.line:hover{border-style:solid;border-color:var(--blue)}
+.role{font-family:var(--mono);font-size:10px;letter-spacing:1px;padding:3px 7px;border-radius:6px;flex:none}
+.role.s{background:#e0f2fe;color:#0369a1}.role.c{background:#dcfce7;color:#15803d}
+.gap{display:inline-block;min-width:84px;border-bottom:3px solid var(--sun);text-align:center;color:var(--blue);margin:0 4px}
+.answer{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.heard{font-family:var(--mono);font-size:12px;color:var(--muted);margin-top:8px}
+
+/* result */
+.arrive{height:clamp(160px,26vw,260px)}.arrive svg{width:100%;height:100%;display:block}
+.final{display:grid;grid-template-columns:1fr 160px;max-width:640px;margin:0 auto;background:#fff;border:2px solid var(--line);border-radius:18px;overflow:hidden}
+.final .main{padding:22px 24px;border-right:3px dashed var(--line)}
+.final .stub{background:var(--cream);padding:18px 14px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:6px}
+.final .stub b{font-family:var(--mono);font-size:40px;color:var(--blue)}
+.final .stub small{font-family:var(--mono);font-size:10px;color:#a1793a;letter-spacing:1px}
+.stars{display:flex;gap:6px}.stars svg{width:40px;height:40px}
+.bars{height:40px;width:100%;margin-top:10px;background:repeating-linear-gradient(90deg,#1e3a8a 0 2px,transparent 2px 4px,#1e3a8a 4px 7px,transparent 7px 9px,#1e3a8a 9px 10px,transparent 10px 13px)}
+.bigstamp{display:inline-block;margin-top:12px;font-family:var(--mono);letter-spacing:3px;color:var(--green);border:4px double var(--green);padding:6px 14px;border-radius:8px;transform:rotate(-5deg);animation:stamp .5s .3s cubic-bezier(.3,1.6,.5,1) both}
+.review{max-width:640px;margin:18px auto 0;background:var(--soft);border-radius:16px;padding:14px 18px}
+.review h3{margin:0 0 6px;color:#1e3a8a;font-size:16px}
+.review div{display:flex;gap:10px;align-items:center;padding:7px 0;border-bottom:1px dashed var(--line);font-weight:700}
+.review div:last-child{border:0}
+
+canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:50}
+footer{text-align:center;color:var(--muted);font-family:var(--mono);font-size:10px;letter-spacing:1px;padding:6px 16px 26px}
+@media(max-width:780px){
+  .home{grid-template-columns:1fr}.dep{grid-template-columns:50px 1fr 76px 70px;font-size:11px;padding:8px 10px}
+  .hud{grid-template-columns:1fr auto}.hud .art{display:none}
+  .map .nm{font-size:8px}.final{grid-template-columns:1fr}.final .main{border-right:0;border-bottom:3px dashed var(--line)}
+  .b{max-width:100%}.chip{display:none}
+}
+</style>
+</head>
+<body>
+<canvas id="fx"></canvas>
+<div class="strip">
+  <div class="logo"><i><svg class="i" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="14" rx="3"/><path d="M5 11h14M8 21l2-4M16 21l-2-4"/></svg></i>TICKET <span>MASTER</span></div>
+  <div class="chip">GRADE 7 · TRAVEL &amp; TRANSPORT · <span id="clock">09:00</span></div>
+</div>
+
+<main>
+<!-- HOME -->
+<section id="home" class="card">
+  <div class="hero" id="hero"></div>
+  <div class="pad home">
+    <div>
+      <div class="eyebrow">Almaty-2 station · ticket office</div>
+      <div class="flaps" id="flaps"></div>
+      <p class="sub">Your mission: buy a train ticket from Almaty to Astana and talk to the ticket seller in English. Pass four stations on the route and become a <b>Ticket Master</b>.</p>
+      <div class="kz"><b class="tagkz">KZ</b><span>Маршрут бойынша 4 бекеттен өтіп, кассирмен ағылшынша сөйлесіп, Алматыдан Астанаға билет ал. Динамик белгісін басып, сөйлемдерді тыңда.</span></div>
+      <div class="deps">
+        <div class="dep head"><span>TIME</span><span>STATION</span><span>TASK</span><span>STATUS</span></div>
+        <div class="dep"><span class="t">09:00</span><span>WORDS</span><span>VOCAB</span><span class="ok">OPEN</span></div>
+        <div class="dep"><span class="t">09:10</span><span>DIALOGUE</span><span>ORDER</span><span class="ok">OPEN</span></div>
+        <div class="dep"><span class="t">09:20</span><span>GRAMMAR</span><span>GAPS</span><span class="ok">OPEN</span></div>
+        <div class="dep"><span class="t">09:30</span><span>SPEAKING</span><span>ROLE-PLAY</span><span class="ok blink">BOARDING</span></div>
+      </div>
+      <div class="start">
+        <input type="text" id="name" maxlength="20" placeholder="Your name / Атың" autocomplete="off" onkeydown="if(event.key==='Enter')startGame()">
+        <button class="btn am" onclick="startGame()">Start the journey <svg class="i" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+      </div>
+      <div class="best" id="best"></div>
+    </div>
+    <aside class="pass">
+      <div class="top"><span class="eyebrow" style="color:#a1793a">Boarding pass</span><span class="eyebrow" style="color:var(--blue)">Train 7A</span></div>
+      <div class="route"><span class="city">ALA</span><i></i><svg class="i" viewBox="0 0 24 24" style="width:26px;height:26px;color:var(--blue)"><rect x="5" y="3" width="14" height="14" rx="3"/><path d="M5 11h14M8 21l2-4M16 21l-2-4"/></svg><i></i><span class="city">NQZ</span></div>
+      <div class="meta"><div>PLATFORM<b>7</b></div><div>DEPARTS<b>09:30</b></div><div>SEAT<b>WINDOW</b></div></div>
+      <div class="legs">
+        <div><span>01</span>Ticket words<em>20</em></div>
+        <div><span>02</span>Build the dialogue<em>20</em></div>
+        <div><span>03</span>Grammar check<em>20</em></div>
+        <div><span>04</span>Speaking role-play<em>40</em></div>
+      </div>
+      <div class="scan">TOTAL 100 POINTS · PASS EVERY STATION</div>
+    </aside>
+  </div>
+</section>
+
+<!-- GAME -->
+<section id="game" class="card pad hidden">
+  <div class="hud">
+    <div class="art" id="art"></div>
+    <div><div class="eyebrow" id="stLabel">Station 1 of 4</div><h2 id="stTitle">Ticket words</h2></div>
+    <div class="score"><div class="lcd" id="lcdScore"><small>SCORE</small><b id="score">000</b></div><div class="lcd" id="lcdStreak"><small>STREAK</small><b id="streak">x0</b></div></div>
+  </div>
+  <div class="map">
+    <div class="rail"></div><div class="fill" id="fill"></div>
+    <div class="stops" id="stops"></div>
+    <div class="train" id="train" style="left:0"><svg viewBox="0 0 34 22"><rect x="1" y="2" width="28" height="14" rx="5" fill="#2563eb"/><rect x="5" y="5" width="7" height="5" rx="1.5" fill="#dbeafe"/><rect x="14" y="5" width="7" height="5" rx="1.5" fill="#dbeafe"/><rect x="1" y="12" width="28" height="2" fill="#fbbf24"/><path d="M29 6h3v8h-3" fill="#2563eb"/><circle cx="8" cy="18.5" r="2.5" fill="#334155"/><circle cx="22" cy="18.5" r="2.5" fill="#334155"/></svg></div>
+  </div>
+  <div id="content"></div>
+  <div id="fb"></div>
+  <div class="actions" id="acts"></div>
+</section>
+
+<!-- RESULT -->
+<section id="result" class="card hidden">
+  <div class="arrive" id="arrive"></div>
+  <div class="pad">
+    <div class="eyebrow" style="text-align:center;margin-bottom:14px">Arrived · Astana Nurly Zhol station</div>
+    <div class="final">
+      <div class="main">
+        <div class="eyebrow">Passenger</div>
+        <h2 id="passName" style="font-size:30px">Passenger</h2>
+        <p class="sub" id="verdict" style="margin-top:6px"></p>
+        <div class="stars" id="stars" style="margin-top:12px"></div>
+        <div class="bigstamp" id="bigstamp">TICKET MASTER</div>
+      </div>
+      <div class="stub"><small>SCORE</small><b id="final">0</b><small>OF 100</small><small id="passInfo"></small><div class="bars"></div></div>
+    </div>
+    <div class="review" id="review"></div>
+    <div class="actions" style="justify-content:center">
+      <button class="btn am" onclick="startGame()"><svg class="i" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>Play again</button>
+      <button class="btn ghost" onclick="show('home')">Home</button>
+    </div>
+  </div>
+</section>
+</main>
+<footer>CREATED WITH AI SUPPORT · ENGLISH SPEAKING PRACTICE · GRADE 7</footer>
+<script>
+/* ---------- hand-drawn SVG scenes (no external images) ---------- */
+const SKY=(id,top,bot)=>`<linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${top}"/><stop offset="1" stop-color="${bot}"/></linearGradient>`;
+
+function trainSVG(x,y,s=1){
+  return `<g transform="translate(${x} ${y}) scale(${s})">
+    <rect x="0" y="0" width="150" height="46" rx="14" fill="#2563eb"/>
+    <path d="M150 6h18a22 22 0 0 1 22 22v18h-40z" fill="#2563eb"/>
+    <rect x="158" y="12" width="20" height="16" rx="4" fill="#dbeafe"/>
+    ${[14,52,90].map(x=>`<rect x="${x}" y="10" width="28" height="18" rx="4" fill="#dbeafe"/>`).join("")}
+    <rect x="0" y="32" width="190" height="6" fill="#fbbf24"/>
+    <rect x="200" y="0" width="150" height="46" rx="10" fill="#3b82f6"/>
+    ${[214,252,290].map(x=>`<rect x="${x}" y="10" width="28" height="18" rx="4" fill="#dbeafe"/>`).join("")}
+    <rect x="200" y="32" width="150" height="6" fill="#fbbf24"/>
+    <rect x="190" y="26" width="10" height="6" fill="#64748b"/>
+    ${[26,70,140,226,300,330].map(x=>`<circle cx="${x}" cy="48" r="7" fill="#334155"/><circle cx="${x}" cy="48" r="2.5" fill="#cbd5e1"/>`).join("")}
+  </g>`;
+}
+function rails(y){
+  let t="";for(let x=0;x<1000;x+=26)t+=`<rect x="${x}" y="${y+2}" width="14" height="6" rx="1" fill="#c4a780"/>`;
+  return t+`<rect x="0" y="${y}" width="1000" height="3" fill="#94a3b8"/>`;
+}
+function apple(x,y,s=1){
+  return `<g transform="translate(${x} ${y}) scale(${s})"><rect x="-4" y="0" width="8" height="34" rx="3" fill="#8b5e3c"/>
+   <circle cx="0" cy="-10" r="26" fill="#4ade80"/><circle cx="-16" cy="2" r="16" fill="#22c55e"/><circle cx="16" cy="0" r="17" fill="#22c55e"/>
+   ${[[-12,-14],[8,-20],[14,-2],[-4,0],[-20,0],[2,-8]].map(([a,b])=>`<circle cx="${a}" cy="${b}" r="3.6" fill="#ef4444"/>`).join("")}</g>`;
+}
+function houses(base,list){
+  return list.map(([x,w,h,c])=>{let win="";for(let yy=base-h+12;yy<base-10;yy+=16)for(let xx=x+8;xx<x+w-10;xx+=14)win+=`<rect x="${xx}" y="${yy}" width="7" height="8" rx="1" fill="#fff" opacity=".85"/>`;
+    return `<rect x="${x}" y="${base-h}" width="${w}" height="${h}" rx="3" fill="${c}"/>${win}`}).join("");
+}
+
+/* Almaty: snowy Ile Alatau, Kok-Tobe TV tower, apple trees, train */
+const ALMATY=`<svg viewBox="0 0 1000 340" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Almaty: mountains, Kok-Tobe tower and a train">
+<defs>${SKY("sa","#9bd4ff","#e8f6ff")}</defs>
+<rect width="1000" height="340" fill="url(#sa)"/>
+<circle cx="840" cy="70" r="38" fill="#fde68a"/><circle cx="840" cy="70" r="28" fill="#fbbf24"/>
+<g fill="#fff" opacity=".9"><ellipse cx="160" cy="60" rx="46" ry="14"/><ellipse cx="190" cy="50" rx="30" ry="14"/><ellipse cx="610" cy="44" rx="40" ry="12"/></g>
+<path d="M0 230 L90 150 L150 190 L250 90 L330 170 L420 110 L520 190 L610 100 L700 170 L790 120 L880 180 L1000 130 V260 H0Z" fill="#93b4d6"/>
+<path d="M250 90 L222 118 L238 114 L250 124 L264 112 L280 120Z M610 100 L584 126 L600 122 L612 132 L626 120 L640 128Z M420 110 L398 132 L414 128 L424 136 L436 128 L446 132Z M790 120 L770 140 L784 136 L794 144 L806 136 L814 140Z" fill="#fff"/>
+<path d="M0 250 L120 200 L240 236 L360 196 L480 240 L600 206 L720 238 L860 200 L1000 236 V300 H0Z" fill="#7cc49a"/>
+<g transform="translate(760 92)"><path d="M0 120 L10 0 L20 120" fill="none" stroke="#64748b" stroke-width="3"/>
+ <path d="M3 90 L17 90 M5 60 L15 60 M7 30 L13 30" stroke="#64748b" stroke-width="2"/>
+ <rect x="2" y="40" width="16" height="8" rx="2" fill="#ef4444"/><line x1="10" y1="0" x2="10" y2="-18" stroke="#64748b" stroke-width="2"/></g>
+${houses(268,[[40,60,70,"#fca5a5"],[110,44,96,"#fcd34d"],[160,70,60,"#a5b4fc"],[420,54,84,"#f9a8d4"],[480,64,64,"#93c5fd"],[560,46,100,"#fdba74"],[880,70,74,"#c4b5fd"]])}
+${apple(260,244,.9)}${apple(330,252,.75)}${apple(640,250,.8)}${apple(980,246,.9)}
+<rect x="0" y="268" width="1000" height="72" fill="#e7f3d9"/>
+${rails(300)}
+<g class="drive">${trainSVG(330,250,.95)}</g>
+<g font-family="Nunito,Arial" font-weight="900"><rect x="24" y="22" width="132" height="40" rx="10" fill="#fff"/><text x="90" y="49" text-anchor="middle" font-size="20" fill="#1e3a8a">ALMATY</text></g>
+</svg>`;
+
+/* Astana: Baiterek, Khan Shatyr, steppe */
+const ASTANA=`<svg viewBox="0 0 1000 300" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Astana: Baiterek and Khan Shatyr">
+<defs>${SKY("sb","#a5dcff","#f0f9ff")}<linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fde68a"/><stop offset="1" stop-color="#f59e0b"/></linearGradient></defs>
+<rect width="1000" height="300" fill="url(#sb)"/>
+<circle cx="140" cy="70" r="34" fill="#fde68a"/>
+<g fill="#fff" opacity=".9"><ellipse cx="760" cy="56" rx="50" ry="14"/><ellipse cx="800" cy="46" rx="30" ry="12"/></g>
+${houses(240,[[40,50,80,"#bfdbfe"],[96,60,120,"#93c5fd"],[700,56,110,"#a5b4fc"],[760,46,80,"#bfdbfe"],[860,70,130,"#93c5fd"],[934,50,90,"#c7d2fe"]])}
+<g transform="translate(250 240)"><path d="M0 0 L60 -150 L150 0Z" fill="#fde68a" stroke="#f59e0b" stroke-width="3"/><path d="M60 -150 L40 0 M60 -150 L95 0 M60 -150 L125 0 M60 -150 L15 0" stroke="#f59e0b" stroke-width="1.5" opacity=".6"/></g>
+<g transform="translate(520 240)">
+ <path d="M-8 0 L-4 -120 L4 -120 L8 0Z" fill="#f8fafc" stroke="#cbd5e1" stroke-width="2"/>
+ <path d="M-4 -116 C -30 -130 -44 -150 -40 -176 M4 -116 C 30 -130 44 -150 40 -176 M-2 -118 C -14 -140 -18 -160 -14 -184 M2 -118 C 14 -140 18 -160 14 -184" fill="none" stroke="#f8fafc" stroke-width="7" stroke-linecap="round"/>
+ <path d="M-4 -116 C -30 -130 -44 -150 -40 -176 M4 -116 C 30 -130 44 -150 40 -176 M-2 -118 C -14 -140 -18 -160 -14 -184 M2 -118 C 14 -140 18 -160 14 -184" fill="none" stroke="#cbd5e1" stroke-width="1.5"/>
+ <circle cx="0" cy="-168" r="28" fill="url(#gold)"/><ellipse cx="-9" cy="-178" rx="8" ry="5" fill="#fff" opacity=".6"/>
+</g>
+<g transform="translate(600 240)"><rect x="0" y="-60" width="80" height="60" rx="3" fill="#e0f2fe" stroke="#93c5fd" stroke-width="2"/><path d="M0 -60 Q40 -100 80 -60Z" fill="#60a5fa"/><rect x="36" y="-88" width="8" height="10" fill="#fbbf24"/></g>
+<rect x="0" y="240" width="1000" height="60" fill="#fde9b8"/>
+${rails(262)}
+<g font-family="Nunito,Arial" font-weight="900"><rect x="844" y="22" width="132" height="40" rx="10" fill="#fff"/><text x="910" y="49" text-anchor="middle" font-size="20" fill="#1e3a8a">ASTANA</text></g>
+</svg>`;
+
+/* Ticket office window with a friendly seller */
+const OFFICE=`<svg viewBox="0 0 300 220" role="img" aria-label="Ticket office window">
+<rect x="10" y="10" width="280" height="200" rx="18" fill="#e0f2fe"/>
+<rect x="30" y="20" width="240" height="34" rx="8" fill="#2563eb"/>
+<text x="150" y="44" text-anchor="middle" font-family="Nunito,Arial" font-weight="900" font-size="18" fill="#fff" letter-spacing="3">TICKETS</text>
+<rect x="46" y="66" width="208" height="120" rx="12" fill="#fff" stroke="#93c5fd" stroke-width="4"/>
+<circle cx="150" cy="114" r="24" fill="#fcd9b6"/>
+<path d="M124 108 Q150 74 176 108 Z" fill="#1e3a8a"/><rect x="120" y="104" width="60" height="7" rx="3" fill="#1e3a8a"/>
+<circle cx="141" cy="116" r="2.6" fill="#1e293b"/><circle cx="159" cy="116" r="2.6" fill="#1e293b"/>
+<path d="M142 125 Q150 132 158 125" stroke="#1e293b" stroke-width="2.4" fill="none" stroke-linecap="round"/>
+<path d="M106 186 Q110 146 150 142 Q190 146 194 186Z" fill="#3b82f6"/><path d="M144 146 L150 160 L156 146" fill="#fbbf24"/>
+<rect x="30" y="182" width="240" height="18" rx="5" fill="#94a3b8"/>
+<g transform="translate(200 160) rotate(-12)"><rect width="56" height="30" rx="5" fill="#fbbf24"/><rect x="38" width="2" height="30" fill="#fff" opacity=".8"/><text x="18" y="20" text-anchor="middle" font-family="Nunito" font-weight="900" font-size="11" fill="#78350f">NQZ</text></g>
+</svg>`;
+
+/* Small station pictures for the stages */
+const STAGE_ART=[
+ `<svg viewBox="0 0 120 90"><rect x="10" y="20" width="100" height="56" rx="10" fill="#fbbf24"/><rect x="78" y="20" width="3" height="56" fill="#fff" opacity=".8"/><text x="44" y="46" text-anchor="middle" font-family="Nunito" font-weight="900" font-size="14" fill="#78350f">TICKET</text><text x="44" y="64" text-anchor="middle" font-family="Nunito" font-weight="800" font-size="10" fill="#92400e">ALA → NQZ</text><circle cx="96" cy="48" r="8" fill="#fff" opacity=".7"/></svg>`,
+ `<svg viewBox="0 0 120 90"><rect x="8" y="14" width="70" height="30" rx="12" fill="#dbeafe"/><path d="M20 44 l-6 12 16-12z" fill="#dbeafe"/><rect x="42" y="46" width="70" height="30" rx="12" fill="#bbf7d0"/><path d="M100 76 l6 10-16-10z" fill="#bbf7d0"/><g fill="#1e3a8a"><circle cx="30" cy="29" r="3"/><circle cx="43" cy="29" r="3"/><circle cx="56" cy="29" r="3"/></g><g fill="#166534"><circle cx="64" cy="61" r="3"/><circle cx="77" cy="61" r="3"/><circle cx="90" cy="61" r="3"/></g></svg>`,
+ `<svg viewBox="0 0 120 90"><rect x="16" y="10" width="88" height="70" rx="8" fill="#fff" stroke="#cbd5e1" stroke-width="3"/><g stroke="#cbd5e1" stroke-width="3" stroke-linecap="round"><line x1="28" y1="28" x2="92" y2="28"/><line x1="28" y1="44" x2="54" y2="44"/><line x1="78" y1="44" x2="92" y2="44"/><line x1="28" y1="60" x2="80" y2="60"/></g><rect x="56" y="37" width="20" height="14" rx="3" fill="#fbbf24"/><path d="M84 66 l18-18 6 6-18 18-8 2z" fill="#2563eb"/></svg>`,
+ OFFICE
+];
+
+/* ---------- icons & helpers ---------- */
+const I={
+ spk:'<svg class="i" viewBox="0 0 24 24"><path d="M4 10v4h4l5 4V6L8 10z"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg>',
+ mic:'<svg class="i" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>',
+ send:'<svg class="i" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg>',
+ undo:'<svg class="i" viewBox="0 0 24 24"><path d="M9 14 4 9l5-5"/><path d="M4 9h11a5 5 0 0 1 0 10h-3"/></svg>',
+ bulb:'<svg class="i" viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9V16h7v-2.1A6 6 0 0 0 12 3z"/></svg>',
+ star:on=>`<svg viewBox="0 0 24 24"><path d="M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.1 1.2-6.5L2.5 9.4l6.6-.9z" fill="${on?'#ffb627':'#e9dfc8'}" stroke="${on?'#c77d00':'#d8ccb0'}" stroke-width="1.2"/></svg>`
+};
+const $=id=>document.getElementById(id);
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function speak(text){try{const u=new SpeechSynthesisUtterance(text);u.lang='en-GB';u.rate=.9;speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){}}
+const sayBtn=t=>`<button class="say" title="Listen" aria-label="Listen" onclick="speak(this.dataset.t)" data-t="${esc(t)}">${I.spk}</button>`;
+function store(k,v){try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){return null}}
+const pad=n=>String(n).padStart(3,"0");
+
+/* ---------- split-flap title & clock ---------- */
+function flaps(){
+  const rows=["TICKET","MASTER"];
+  $("flaps").innerHTML=rows.map((w,r)=>`<div class="row">${[...w].map((c,i)=>`<div class="flap ${r?'am':''} go" style="animation-delay:${(r*6+i)*.06}s">${c}</div>`).join("")}</div>`).join("");
+}
+function clock(){const d=new Date();if($("clock"))$("clock").textContent=String(d.getHours()).padStart(2,"0")+":"+String(d.getMinutes()).padStart(2,"0")}
+setInterval(clock,10000);clock();
+
+let S={};
+const STATIONS=["Ticket words","Build the dialogue","Grammar check","Speaking role-play"];
+const STOPS=["Almaty","Words","Dialogue","Grammar","Speaking","Astana"];
+
+function show(id){["home","game","result"].forEach(x=>$(x).classList.toggle("hidden",x!==id));window.scrollTo(0,0);if(id==="home"){showBest();flaps()}if(id==="result")$("arrive").innerHTML=ASTANA}
+function showBest(){const b=store("tm_best");$("best").textContent=b?`BEST SCORE ON THIS DEVICE: ${b}/100`:""}
+
+function startGame(){
+  S={name:($("name").value.trim()||"Passenger"),score:0,streak:0,maxStreak:0,stage:0,mistakes:[]};
+  $("stops").innerHTML=STOPS.map(n=>`<div class="st"><div class="dot"></div><div class="nm">${n}</div></div>`).join("");
+  show("game");render();
+}
+function hud(pos){
+  $("score").textContent=pad(S.score);$("streak").textContent="x"+S.streak;
+  if(S.stage<4){$("stLabel").textContent=`Station ${S.stage+1} of 4`;$("stTitle").textContent=STATIONS[S.stage]}
+  const p=(pos??S.stage+1)/(STOPS.length-1)*100;$("fill").style.width=p+"%";$("train").style.left=p+"%";
+  document.querySelectorAll(".map .st").forEach((s,i)=>{s.classList.toggle("done",i<(pos??S.stage+1));s.classList.toggle("now",i===(pos??S.stage+1))});
+}
+function bump(id){const e=$(id);e.classList.remove("bump");void e.offsetWidth;e.classList.add("bump")}
+function clear(){$("fb").innerHTML="";$("acts").innerHTML=""}
+function fb(msg,type){const w={good:"APPROVED",bad:"TRY AGAIN",info:"NOTE"}[type];$("fb").innerHTML=`<div class="fb ${type}"><span class="stamp">${w}</span><span>${msg}</span></div>`}
+function act(label,fn,cls="btn am"){const b=document.createElement("button");b.className=cls;b.innerHTML=label;b.onclick=fn;$("acts").appendChild(b);return b}
+function win(p){S.score+=p;S.streak++;S.maxStreak=Math.max(S.maxStreak,S.streak);hud();bump("lcdScore");if(S.streak>=3){bump("lcdStreak");burst(20)}}
+function lose(item){S.streak=0;if(item&&!S.mistakes.includes(item))S.mistakes.push(item);hud()}
+function nextStage(){S.stage++;if(S.stage>=4)return finish();render()}
+function render(){clear();hud();$("art").innerHTML=STAGE_ART[S.stage];$("art").classList.toggle("big",S.stage===3);[vocab,build,grammar,role][S.stage]()}
+const NEXT=last=>last?`Next station ${I.send}`:`Next ${I.send}`;
+const kz=t=>`<div class="kz"><b class="tagkz">KZ</b><span>${t}</span></div>`;
+const optBtn=(x,i,fn)=>`<button class="opt" onclick="${fn}(${i})"><span class="k">${"ABC"[i]}</span><span>${esc(x)}</span></button>`;
+function mark(right,i){document.querySelectorAll(".opt").forEach((b,j)=>{b.disabled=true;if(j===right)b.classList.add("ok");if(j===i&&i!==right)b.classList.add("no")})}
+
+/* ---------- 1. vocabulary (4 × 5) ---------- */
+const VOCAB=[
+ {q:"You want to go to Astana and NOT come back. What do you buy?",a:["A single ticket","A return ticket","A season ticket"],why:"A single ticket is for one journey only.",key:"single ticket — one journey"},
+ {q:"You want to go to Astana and come back home. What do you buy?",a:["A return ticket","A single ticket","A window seat"],why:"A return ticket is for there and back.",key:"return ticket — there and back"},
+ {q:"Where do you wait for the train?",a:["On the platform","At the ticket office","On the timetable"],why:"You wait for the train on the platform.",key:"platform"},
+ {q:"Which question asks about the price?",a:["How much is it?","How many is it?","How long is it?"],why:"We ask about money with “How much…?”",key:"How much is it?"},
+ {q:"Where can you see what time the trains leave?",a:["On the timetable","On the ticket","On the platform sign"],why:"A timetable shows the times of the trains.",key:"timetable"},
+ {q:"“The train leaves at 9:30” means…",a:["The train goes away at 9:30","The train arrives at 9:30","The train is late at 9:30"],why:"“Leave” means to go away from a place.",key:"leave — go away"}
+];
+function vocab(){S.v=shuffle(VOCAB).slice(0,4);S.vi=0;vq()}
+function vq(){
+  clear();const q=S.v[S.vi];q.order=shuffle(q.a);
+  $("content").innerHTML=`<p class="sub">Choose the correct answer. Each correct answer gives you 5 points.</p>
+  ${kz("Дұрыс жауапты таңда.")}
+  <div class="q">${sayBtn(q.q)}<span>${esc(q.q)}</span></div>
+  <div class="grid">${q.order.map((x,i)=>optBtn(x,i,"vAns")).join("")}</div>
+  <div class="count">QUESTION ${S.vi+1} / 4</div>`;
+}
+function vAns(i){
+  const q=S.v[S.vi],right=q.order.indexOf(q.a[0]);mark(right,i);
+  if(i===right){win(5);fb(q.why+" <b>+5</b>","good")}else{lose(q.key);fb(q.why,"bad")}
+  speak(q.a[0]);S.vi++;act(NEXT(S.vi>=4),()=>S.vi<4?vq():nextStage());
+}
+
+/* ---------- 2. build the dialogue (20) ---------- */
+const DIALOG=[
+ ["s","Good morning! How can I help you?"],
+ ["c","I'd like a ticket to Astana, please."],
+ ["s","Single or return?"],
+ ["c","Single, please. How much is it?"],
+ ["s","That's 5,000 tenge."],
+ ["c","What time does the train leave?"],
+ ["s","It leaves at 9:30 from platform 7."],
+ ["c","Here you are. Thank you!"]
+];
+function build(){S.pick=[];S.pool=shuffle(DIALOG.map((d,i)=>i));drawBuild()}
+function bubble(d,say=true){return `<div class="b ${d[0]}">${say?sayBtn(d[1]):""}<div class="t"><span class="who">${d[0]==="s"?"TICKET SELLER":"YOU"}</span>${esc(d[1])}</div></div>`}
+function drawBuild(){
+  const chat=S.pick.map(i=>bubble(DIALOG[i])).join("")||`<p style="color:var(--muted);font-weight:700;margin:6px">Tap the lines below in the correct order…</p>`;
+  $("content").innerHTML=`<p class="sub">Put the conversation in the correct order. The ticket seller speaks first.</p>
+  ${kz("Диалогтың жолдарын дұрыс ретпен бас. Алдымен кассир сөйлейді.")}
+  <div class="chat">${chat}</div>
+  <div class="bank">${S.pool.filter(i=>!S.pick.includes(i)).map(i=>`<button class="line" onclick="pick(${i})"><span class="role ${DIALOG[i][0]}">${DIALOG[i][0]==="s"?"SELLER":"YOU"}</span>${esc(DIALOG[i][1])}</button>`).join("")}</div>`;
+  $("acts").innerHTML="";
+  const u=act(`${I.undo} Undo`,()=>{S.pick.pop();drawBuild()},"btn ghost");u.disabled=!S.pick.length;
+  if(S.pick.length===DIALOG.length)act(`Check the order ${I.send}`,checkBuild);
+}
+function pick(i){S.pick.push(i);drawBuild()}
+function checkBuild(){
+  const right=S.pick.filter((v,i)=>v===i).length,pts=Math.round(20*right/DIALOG.length);
+  $("acts").innerHTML="";
+  if(right===DIALOG.length){win(20);fb("Perfect order! The whole conversation is correct. <b>+20</b>","good")}
+  else{S.score+=pts;S.streak=0;S.pick.forEach((v,i)=>{if(v!==i&&!S.mistakes.includes(DIALOG[i][1]))S.mistakes.push(DIALOG[i][1])});hud();bump("lcdScore");
+    $("content").innerHTML=`<p class="sub">Here is the correct conversation. Listen to it and read it once more.</p><div class="chat">${DIALOG.map(d=>bubble(d)).join("")}</div>`;
+    fb(`${right} of ${DIALOG.length} lines were in the right place. <b>+${pts}</b>`,"info")}
+  act(NEXT(true),nextStage);
+}
+
+/* ---------- 3. grammar gaps (4 × 5) ---------- */
+const GAPS=[
+ {pre:"I'd like",post:"ticket to Astana, please.",o:["a","an","the"],why:"We say “a ticket”: one ticket, first time.",who:"c"},
+ {pre:"How",post:"is a return ticket?",o:["much","many","long"],why:"For money we ask “How much…?”",who:"c"},
+ {pre:"The train",post:"at 9:30.",o:["leaves","leave","leaving"],why:"The train (it) → leaves. Present Simple + s.",who:"s"},
+ {pre:"What time",post:"the train arrive in Astana?",o:["does","do","is"],why:"A question about the train (it) → does.",who:"c"},
+ {pre:"It leaves",post:"platform 7.",o:["from","on","to"],why:"A train leaves FROM a platform.",who:"s"}
+];
+function grammar(){S.g=shuffle(GAPS).slice(0,4);S.gi=0;gq()}
+function gq(){
+  clear();const q=S.g[S.gi];q.order=shuffle(q.o);
+  $("content").innerHTML=`<p class="sub">Choose the word that completes the sentence. Each correct answer gives you 5 points.</p>
+  ${kz("Бос орынға дұрыс сөзді қой. Грамматикаға назар аудар.")}
+  <div class="chat"><div class="b ${q.who}"><div class="t" style="font-size:19px"><span class="who">${q.who==="s"?"TICKET SELLER":"YOU"}</span>${esc(q.pre)} <span class="gap" id="gapw">?</span> ${esc(q.post)}</div></div></div>
+  <div class="grid" style="margin-top:14px">${q.order.map((x,i)=>optBtn(x,i,"gAns")).join("")}</div>
+  <div class="count">SENTENCE ${S.gi+1} / 4</div>`;
+}
+function gAns(i){
+  const q=S.g[S.gi],right=q.order.indexOf(q.o[0]);mark(right,i);
+  $("gapw").textContent=q.o[0];const full=`${q.pre} ${q.o[0]} ${q.post}`;
+  if(i===right){win(5);fb(q.why+" <b>+5</b>","good")}else{lose(full);fb(q.why,"bad")}
+  speak(full);S.gi++;act(NEXT(S.gi>=4),()=>S.gi<4?gq():nextStage());
+}
+
+/* ---------- 4. speaking role-play (4 × 10) ---------- */
+const ROLE=[
+ {say:"Good morning! Welcome to Almaty station. Where would you like to go?",task:"Ask for a ticket to Astana.",kz:"Астанаға билет сұра.",check:t=>/ticket/.test(t)&&/astana/.test(t),model:"I'd like a ticket to Astana, please."},
+ {say:"Would you like a single or a return ticket?",task:"You want to come back home. Say which ticket you need.",kz:"Үйге қайтып келгің келеді. Қандай билет керек екенін айт.",check:t=>/return/.test(t),model:"A return ticket, please."},
+ {say:"OK, a return ticket to Astana. Anything else?",task:"Ask about the price.",kz:"Бағасын сұра.",check:t=>/how much/.test(t)||/price|cost/.test(t),model:"How much is it?"},
+ {say:"That's 9,000 tenge. The train leaves at 9:30 from platform 7. Have a nice journey!",task:"Pay and say thank you politely.",kz:"Ақшаны беріп, сыпайы алғыс айт.",check:t=>/thank/.test(t),model:"Here you are. Thank you very much!"}
+];
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+function role(){S.ri=0;S.chat=[];rq()}
+function rq(){
+  clear();const q=ROLE[S.ri];S.tries=0;
+  $("content").innerHTML=`<p class="sub">Answer the ticket seller <b>in your own words</b>. Say it out loud, or type it. First try: 10 points, after a hint: 5 points.</p>
+  <div class="chat">${S.chat.join("")}${bubble(["s",q.say])}</div>
+  ${kz(`<b>${esc(q.task)}</b><br>${esc(q.kz)}`)}
+  <div class="answer">
+    <input type="text" id="ans" placeholder="Type your answer in English…" autocomplete="off" onkeydown="if(event.key==='Enter')rCheck()">
+    ${SR?`<button class="btn mic" id="micb" onclick="listen()">${I.mic} Speak</button>`:""}
+    <button class="btn" onclick="rCheck()">Send ${I.send}</button>
+  </div>
+  <div class="heard" id="heard"></div>
+  <div class="count">TURN ${S.ri+1} / 4</div>`;
+  act(`${I.bulb} Hint`,()=>{S.tries=Math.max(S.tries,1);fb(`You can say: <b>${esc(q.model)}</b> ${sayBtn(q.model)}`,"info")},"btn ghost");
+  speak(q.say);
+}
+function listen(){
+  let r;try{r=new SR()}catch(e){return noMic()}
+  r.lang="en-US";r.interimResults=false;r.maxAlternatives=3;
+  const b=$("micb");b.classList.add("on");b.innerHTML=`${I.mic} Listening…`;
+  r.onresult=e=>{const alts=[...e.results[0]].map(x=>x.transcript);$("ans").value=alts[0];$("heard").textContent="I HEARD: “"+alts[0]+"”";S.alts=alts;rCheck()};
+  r.onerror=e=>{if(e.error==="not-allowed"||e.error==="service-not-allowed")noMic();else $("heard").textContent="I didn't catch that. Try again or type your answer."};
+  r.onend=()=>{const m=$("micb");if(m){m.classList.remove("on");m.innerHTML=`${I.mic} Speak`}};
+  try{r.start()}catch(e){noMic()}
+}
+function noMic(){const b=$("micb");if(b)b.remove();$("heard").textContent="The microphone is not available here. Say your answer out loud, then type it.";}
+function lockTurn(){document.querySelectorAll(".answer button,.answer input").forEach(x=>x.disabled=true);$("acts").innerHTML=""}
+function rCheck(){
+  const q=ROLE[S.ri],raw=$("ans").value.trim();if(!raw)return;
+  const cands=[raw,...(S.alts||[])].map(t=>t.toLowerCase());S.alts=null;
+  const done=()=>{S.ri++;act(S.ri<4?`Next turn ${I.send}`:`Finish the journey ${I.send}`,()=>S.ri<4?rq():finish())};
+  if(cands.some(q.check)){
+    const pts=S.tries===0?10:5;win(pts);
+    S.chat.push(bubble(["s",q.say],false),bubble(["c",raw],false));lockTurn();
+    fb(`Great answer! <b>+${pts}</b><br>Model answer: <b>${esc(q.model)}</b> ${sayBtn(q.model)}`,"good");done();
+  }else{
+    S.tries++;
+    if(S.tries>=3){lose(q.model);S.chat.push(bubble(["s",q.say],false),bubble(["c",q.model],false));lockTurn();
+      fb(`Let's learn it: <b>${esc(q.model)}</b> ${sayBtn(q.model)} Say it out loud three times.`,"bad");done();}
+    else{S.streak=0;hud();fb(`Almost! Remember the task: <b>${esc(q.task)}</b>${S.tries===2?` Hint: <b>${esc(q.model)}</b> ${sayBtn(q.model)}`:" Try again."}`,"bad")}
+  }
+}
+
+/* ---------- finish ---------- */
+function finish(){
+  hud(STOPS.length-1);
+  const s=S.score,stars=s>=85?3:s>=60?2:1;
+  $("final").textContent=s;$("passName").textContent=S.name;
+  $("stars").innerHTML=[1,2,3].map(i=>I.star(i<=stars)).join("");
+  $("verdict").textContent=s>=85?"Outstanding! You are a confident English speaker.":s>=60?"Well done! A little more practice and you'll be a Ticket Master.":"Good effort! Play again and beat your score.";
+  $("bigstamp").textContent=s>=85?"TICKET MASTER":s>=60?"GOOD TRAVELLER":"KEEP PRACTISING";
+  $("bigstamp").style.color=$("bigstamp").style.borderColor=s>=60?"var(--green)":"var(--blue)";
+  $("passInfo").textContent=`BEST STREAK x${S.maxStreak}`;
+  $("review").innerHTML=S.mistakes.length?`<h3>Practise these before the next trip</h3>`+S.mistakes.map(m=>`<div>${sayBtn(m)}<span>${esc(m)}</span></div>`).join(""):`<h3>No mistakes. A perfect journey!</h3>`;
+  const best=+store("tm_best")||0;if(s>best)store("tm_best",s);
+  show("result");burst(stars*60);
+}
+
+/* ---------- confetti (ticket bits) ---------- */
+const cv=$("fx"),cx=cv.getContext("2d");let parts=[];
+function size(){cv.width=innerWidth;cv.height=innerHeight}addEventListener("resize",size);size();
+function burst(n){const run=!parts.length;for(let i=0;i<n;i++)parts.push({x:innerWidth/2,y:innerHeight/3,vx:(Math.random()-.5)*13,vy:Math.random()*-11-3,w:Math.random()*8+6,h:Math.random()*4+3,a:Math.random()*6,va:(Math.random()-.5)*.3,c:["#ffb627","#2457d6","#1f9d55","#fffaf0","#d64545"][i%5],l:110});if(run)tick()}
+function tick(){cx.clearRect(0,0,cv.width,cv.height);parts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=.33;p.vx*=.99;p.a+=p.va;p.l--;cx.save();cx.translate(p.x,p.y);cx.rotate(p.a);cx.fillStyle=p.c;cx.fillRect(-p.w/2,-p.h/2,p.w,p.h);cx.restore()});parts=parts.filter(p=>p.l>0&&p.y<cv.height+20);if(parts.length)requestAnimationFrame(tick);else cx.clearRect(0,0,cv.width,cv.height)}
+
+$("hero").innerHTML=ALMATY;showBest();flaps();
+
+</script>
+</body>
+</html>
